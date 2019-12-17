@@ -11,15 +11,15 @@ namespace DbUp.Oracle
         /// <summary>
         /// Creates an instance of OracleCommandReader
         /// </summary>
-        public OracleCommandReader(string sqlText) : base(sqlText, ";", delimiterRequiresWhitespace: false)
+        public OracleCommandReader(string sqlText) : base(sqlText, "/", delimiterRequiresWhitespace: false)
         {
         }
 
         /// <summary>
         /// Hook to support custom statements
         /// </summary>
-        protected override bool IsCustomStatement => TryPeek(DelimiterKeyword.Length, out var statement) &&
-                       string.Equals(DelimiterKeyword, statement, StringComparison.OrdinalIgnoreCase);
+        protected override bool IsCustomStatement => TryPeek(DelimiterKeyword.Length - 1, out var statement) &&
+                       string.Equals(DelimiterKeyword, CurrentChar + statement, StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
         /// Read a custom statement
